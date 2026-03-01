@@ -2,6 +2,10 @@
 
 一个基于 FastAPI 和简单 HTML 的学生管理系统。
 
+## 项目截图
+
+![项目截图](assets/screenshot.png)
+
 ## 项目结构
 
 ```

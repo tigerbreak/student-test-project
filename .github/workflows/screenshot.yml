@@ -33,7 +33,7 @@ jobs:
       run: |
         cd backend
         python main.py &
-        sleep 3
+        sleep 5
       shell: bash
     
     - name: Set up Node.js
@@ -48,16 +48,21 @@ jobs:
         npx playwright install chromium
         npx playwright install-deps chromium
     
-    - name: Take screenshot with Playwright
+    - name: Take screenshots of all tabs
       run: |
         node scripts/screenshot.js
     
-    - name: Commit and push screenshot
+    - name: Generate README with screenshots
+      run: |
+        node scripts/generate-readme.js
+    
+    - name: Commit and push screenshots
       run: |
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
-        git add assets/screenshot.png || true
-        git diff --staged --quiet || git commit -m "docs: update screenshot in README [skip ci]"
+        git add assets/*.png || true
+        git add README.md || true
+        git diff --staged --quiet || git commit -m "docs: update screenshots in README [skip ci]"
         git push
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

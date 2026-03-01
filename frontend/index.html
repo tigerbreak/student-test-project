@@ -17,7 +17,7 @@
             padding: 20px;
         }
         .container {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             background: white;
             border-radius: 10px;
@@ -28,6 +28,39 @@
             text-align: center;
             color: #333;
             margin-bottom: 30px;
+        }
+        h2 {
+            color: #555;
+            margin: 30px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .nav-tab {
+            padding: 10px 20px;
+            background: #f0f0f0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .nav-tab:hover {
+            background: #e0e0e0;
+        }
+        .nav-tab.active {
+            background: #667eea;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
         }
         .form-section {
             background: #f8f9fa;
@@ -41,14 +74,14 @@
             gap: 15px;
             margin-bottom: 15px;
         }
-        input {
+        input, select {
             width: 100%;
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 5px;
             font-size: 14px;
         }
-        input:focus {
+        input:focus, select:focus {
             outline: none;
             border-color: #667eea;
         }
@@ -80,6 +113,13 @@
         }
         .btn-edit:hover {
             background: #e0a800;
+        }
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #218838;
         }
         table {
             width: 100%;
@@ -118,6 +158,125 @@
             color: #721c24;
             display: block;
         }
+        .card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+        .card h3 {
+            margin-bottom: 10px;
+        }
+        .card .balance {
+            font-size: 32px;
+            font-weight: bold;
+        }
+        .log-item {
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            background: #f8f9fa;
+            margin: 10px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .log-item.priority-high {
+            border-left-color: #dc3545;
+            background: #fff5f5;
+        }
+        .log-item.priority-medium {
+            border-left-color: #ffc107;
+            background: #fffef0;
+        }
+        .log-item.priority-low {
+            border-left-color: #28a745;
+        }
+        .map-container {
+            position: relative;
+            width: 100%;
+            height: 500px;
+            background: #e8f4e8;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .building {
+            position: absolute;
+            padding: 10px;
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 12px;
+            max-width: 150px;
+        }
+        .building:hover {
+            transform: scale(1.1);
+            z-index: 10;
+        }
+        .building.teaching { background: #e3f2fd; }
+        .building.library { background: #f3e5f5; }
+        .building.dining { background: #fff3e0; }
+        .building.sports { background: #e8f5e9; }
+        .building.dormitory { background: #fce4ec; }
+        .building.admin { background: #ffebee; }
+        .building.lab { background: #e0f7fa; }
+        .news-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .news-item:last-child {
+            border-bottom: none;
+        }
+        .news-date {
+            color: #999;
+            font-size: 12px;
+        }
+        .news-title {
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        .news-summary {
+            color: #666;
+            font-size: 14px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #667eea;
+            color: white;
+            border-radius: 3px;
+            font-size: 12px;
+            margin-right: 5px;
+        }
+        .permission-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 5px;
+            margin-top: 20px;
+        }
+        .schedule-header {
+            background: #667eea;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .schedule-cell {
+            background: #f8f9fa;
+            padding: 10px;
+            border: 1px solid #ddd;
+            min-height: 80px;
+            font-size: 12px;
+        }
+        .schedule-cell.has-class {
+            background: #e3f2fd;
+            border-color: #667eea;
+        }
     </style>
 </head>
 <body>
@@ -126,25 +285,38 @@
         
         <div id="message" class="message"></div>
         
-        <div class="form-section">
-            <h3 style="margin-bottom: 15px;">添加/编辑学生</h3>
-            <form id="studentForm">
-                <input type="hidden" id="studentId">
-                <div class="form-row">
-                    <input type="text" id="name" placeholder="姓名" required>
-                    <input type="number" id="age" placeholder="年龄" min="1" max="150" required>
-                </div>
-                <div class="form-row">
-                    <input type="email" id="email" placeholder="邮箱" required>
-                    <input type="text" id="major" placeholder="专业" required>
-                </div>
-                <button type="submit" class="btn btn-primary">提交</button>
-                <button type="button" class="btn" onclick="resetForm()" style="margin-left: 10px;">重置</button>
-            </form>
+        <!-- 导航标签 -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="switchTab('students')">👨‍🎓 学生管理</button>
+            <button class="nav-tab" onclick="switchTab('permissions')">🔐 权限管理</button>
+            <button class="nav-tab" onclick="switchTab('courses')">📚 课程表</button>
+            <button class="nav-tab" onclick="switchTab('card')">💳 饭卡余额</button>
+            <button class="nav-tab" onclick="switchTab('logs')">📢 学校日志</button>
+            <button class="nav-tab" onclick="switchTab('map')">🗺️ 学校平面图</button>
+            <button class="nav-tab" onclick="switchTab('website')">🌐 官网信息</button>
         </div>
         
-        <div>
-            <h3 style="margin-bottom: 15px;">学生列表</h3>
+        <!-- 学生管理 -->
+        <div id="students" class="tab-content active">
+            <h2>学生管理</h2>
+            <div class="form-section">
+                <h3 style="margin-bottom: 15px;">添加/编辑学生</h3>
+                <form id="studentForm">
+                    <input type="hidden" id="studentId">
+                    <div class="form-row">
+                        <input type="text" id="name" placeholder="姓名" required>
+                        <input type="number" id="age" placeholder="年龄" min="1" max="150" required>
+                    </div>
+                    <div class="form-row">
+                        <input type="email" id="email" placeholder="邮箱" required>
+                        <input type="text" id="major" placeholder="专业" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">提交</button>
+                    <button type="button" class="btn" onclick="resetForm()" style="margin-left: 10px;">重置</button>
+                </form>
+            </div>
+            
+            <h3>学生列表</h3>
             <table>
                 <thead>
                     <tr>
@@ -156,14 +328,183 @@
                         <th>操作</th>
                     </tr>
                 </thead>
-                <tbody id="studentsTable">
-                </tbody>
+                <tbody id="studentsTable"></tbody>
             </table>
+        </div>
+        
+        <!-- 权限管理 -->
+        <div id="permissions" class="tab-content">
+            <h2>权限管理</h2>
+            
+            <div class="form-section">
+                <h3>用户列表</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>用户名</th>
+                            <th>邮箱</th>
+                            <th>角色 ID</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTable"></tbody>
+                </table>
+            </div>
+            
+            <div class="form-section">
+                <h3>角色列表</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>角色名称</th>
+                            <th>权限</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rolesTable"></tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- 课程表 -->
+        <div id="courses" class="tab-content">
+            <h2>课程表</h2>
+            <div class="schedule-grid">
+                <div class="schedule-header">时间</div>
+                <div class="schedule-header">周一</div>
+                <div class="schedule-header">周二</div>
+                <div class="schedule-header">周三</div>
+                <div class="schedule-header">周四</div>
+                <div class="schedule-header">周五</div>
+                
+                <div class="schedule-header">8:00-9:40</div>
+                <div class="schedule-cell has-class" id="slot-1-1"></div>
+                <div class="schedule-cell" id="slot-1-2"></div>
+                <div class="schedule-cell" id="slot-1-3"></div>
+                <div class="schedule-cell has-class" id="slot-1-4"></div>
+                <div class="schedule-cell" id="slot-1-5"></div>
+                
+                <div class="schedule-header">10:00-11:40</div>
+                <div class="schedule-cell" id="slot-2-1"></div>
+                <div class="schedule-cell has-class" id="slot-2-2"></div>
+                <div class="schedule-cell" id="slot-2-3"></div>
+                <div class="schedule-cell" id="slot-2-4"></div>
+                <div class="schedule-cell" id="slot-2-5"></div>
+                
+                <div class="schedule-header">14:00-15:40</div>
+                <div class="schedule-cell" id="slot-3-1"></div>
+                <div class="schedule-cell" id="slot-3-2"></div>
+                <div class="schedule-cell has-class" id="slot-3-3"></div>
+                <div class="schedule-cell" id="slot-3-4"></div>
+                <div class="schedule-cell" id="slot-3-5"></div>
+                
+                <div class="schedule-header">16:00-17:40</div>
+                <div class="schedule-cell" id="slot-4-1"></div>
+                <div class="schedule-cell" id="slot-4-2"></div>
+                <div class="schedule-cell" id="slot-4-3"></div>
+                <div class="schedule-cell" id="slot-4-4"></div>
+                <div class="schedule-cell has-class" id="slot-4-5"></div>
+            </div>
+            
+            <h3 style="margin-top: 30px;">所有课程</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>课程名称</th>
+                        <th>教师</th>
+                        <th>时间</th>
+                        <th>地点</th>
+                        <th>学分</th>
+                    </tr>
+                </thead>
+                <tbody id="coursesTable"></tbody>
+            </table>
+        </div>
+        
+        <!-- 饭卡余额 -->
+        <div id="card" class="tab-content">
+            <h2>饭卡余额</h2>
+            <div id="cardBalanceContainer"></div>
+            
+            <div class="form-section" style="margin-top: 20px;">
+                <h3>饭卡充值</h3>
+                <div class="form-row">
+                    <select id="rechargeUser">
+                        <option value="">选择用户</option>
+                    </select>
+                    <input type="number" id="rechargeAmount" placeholder="充值金额" min="1" step="0.01">
+                    <button class="btn btn-success" onclick="rechargeCard()">充值</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 学校日志 -->
+        <div id="logs" class="tab-content">
+            <h2>学校日志</h2>
+            <div style="margin-bottom: 15px;">
+                <button class="btn btn-primary" onclick="loadSchoolLogs()">全部</button>
+                <button class="btn" onclick="loadSchoolLogs('通知')">通知</button>
+                <button class="btn" onclick="loadSchoolLogs('活动')">活动</button>
+                <button class="btn" onclick="loadSchoolLogs('公告')">公告</button>
+                <button class="btn" onclick="loadSchoolLogs('紧急')">紧急</button>
+            </div>
+            <div id="logsContainer"></div>
+        </div>
+        
+        <!-- 学校平面图 -->
+        <div id="map" class="tab-content">
+            <h2>学校平面图</h2>
+            <div class="map-container" id="campusMap"></div>
+            
+            <h3 style="margin-top: 30px;">设施统计</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>设施名称</th>
+                        <th>数量</th>
+                    </tr>
+                </thead>
+                <tbody id="facilitiesTable"></tbody>
+            </table>
+        </div>
+        
+        <!-- 官网信息 -->
+        <div id="website" class="tab-content">
+            <h2>官网信息</h2>
+            
+            <div class="form-section">
+                <h3>📰 最新新闻</h3>
+                <div id="newsContainer"></div>
+            </div>
+            
+            <div class="form-section">
+                <h3>🏛️ 院系设置</h3>
+                <div class="permission-list" id="departmentsContainer"></div>
+            </div>
+            
+            <div class="form-section">
+                <h3>📞 联系方式</h3>
+                <div id="contactContainer"></div>
+            </div>
         </div>
     </div>
 
     <script>
         const API_BASE = 'http://localhost:8000/api';
+        
+        // 切换标签页
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
         
         // 加载学生列表
         async function loadStudents() {
@@ -176,7 +517,6 @@
             }
         }
         
-        // 渲染学生表格
         function renderStudents(students) {
             const tbody = document.getElementById('studentsTable');
             tbody.innerHTML = students.map(student => `
@@ -194,7 +534,7 @@
             `).join('');
         }
         
-        // 提交表单
+        // 提交学生表单
         document.getElementById('studentForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -231,7 +571,6 @@
             }
         });
         
-        // 编辑学生
         async function editStudent(id) {
             try {
                 const response = await fetch(`${API_BASE}/students/${id}`);
@@ -247,7 +586,6 @@
             }
         }
         
-        // 删除学生
         async function deleteStudent(id) {
             if (!confirm('确定要删除这个学生吗？')) return;
             
@@ -268,13 +606,229 @@
             }
         }
         
-        // 重置表单
         function resetForm() {
             document.getElementById('studentForm').reset();
             document.getElementById('studentId').value = '';
         }
         
-        // 显示消息
+        // 加载用户列表
+        async function loadUsers() {
+            try {
+                const response = await fetch(`${API_BASE}/users`);
+                const users = await response.json();
+                const tbody = document.getElementById('usersTable');
+                tbody.innerHTML = users.map(user => `
+                    <tr>
+                        <td>${user.id}</td>
+                        <td>${user.username}</td>
+                        <td>${user.email}</td>
+                        <td>${user.role_id}</td>
+                        <td>
+                            <button class="btn btn-primary" onclick="viewPermissions(${user.id})">查看权限</button>
+                        </td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('加载用户失败:', error);
+            }
+        }
+        
+        // 加载角色列表
+        async function loadRoles() {
+            try {
+                const response = await fetch(`${API_BASE}/roles`);
+                const roles = await response.json();
+                const tbody = document.getElementById('rolesTable');
+                tbody.innerHTML = roles.map(role => `
+                    <tr>
+                        <td>${role.id}</td>
+                        <td>${role.name}</td>
+                        <td><div class="permission-list">${role.permissions.map(p => `<span class="badge">${p}</span>`).join('')}</div></td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('加载角色失败:', error);
+            }
+        }
+        
+        async function viewPermissions(userId) {
+            try {
+                const response = await fetch(`${API_BASE}/users/${userId}/permissions`);
+                const data = await response.json();
+                alert(`用户：${data.user.username}\n角色：${data.role.name}\n权限：${data.permissions.join(', ')}`);
+            } catch (error) {
+                showMessage('加载权限失败：' + error.message, 'error');
+            }
+        }
+        
+        // 加载课程表
+        async function loadCourses() {
+            try {
+                const response = await fetch(`${API_BASE}/courses`);
+                const courses = await response.json();
+                
+                // 填充课程表格
+                const tbody = document.getElementById('coursesTable');
+                tbody.innerHTML = courses.map(course => `
+                    <tr>
+                        <td>${course.id}</td>
+                        <td>${course.name}</td>
+                        <td>${course.teacher}</td>
+                        <td>${course.time}</td>
+                        <td>${course.location}</td>
+                        <td>${course.credits}</td>
+                    </tr>
+                `).join('');
+                
+                // 填充课程网格
+                const timeMap = {'周一 8:00-9:40': '1-1', '周二 10:00-11:40': '2-2', '周三 14:00-15:40': '3-3', '周四 8:00-9:40': '1-4', '周五 16:00-17:40': '4-5'};
+                courses.forEach(course => {
+                    const slot = timeMap[course.time];
+                    if (slot) {
+                        const cell = document.getElementById(`slot-${slot}`);
+                        if (cell) {
+                            cell.innerHTML = `<strong>${course.name}</strong><br>${course.location}<br>${course.teacher}`;
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error('加载课程失败:', error);
+            }
+        }
+        
+        // 加载饭卡余额
+        async function loadCardBalance() {
+            try {
+                const response = await fetch(`${API_BASE}/card-balance`);
+                const balances = await response.json();
+                
+                const container = document.getElementById('cardBalanceContainer');
+                container.innerHTML = balances.map(card => `
+                    <div class="card">
+                        <h3>👤 ${card.username}</h3>
+                        <div class="balance">¥${card.balance.toFixed(2)}</div>
+                        <div>上次充值：${card.last_recharge}</div>
+                        <div>状态：${card.status === 'active' ? '✅ 正常' : '❌ 冻结'}</div>
+                    </div>
+                `).join('');
+                
+                // 填充充值下拉框
+                const select = document.getElementById('rechargeUser');
+                select.innerHTML = '<option value="">选择用户</option>' + 
+                    balances.map(card => `<option value="${card.username}">${card.username}</option>`).join('');
+            } catch (error) {
+                console.error('加载饭卡余额失败:', error);
+            }
+        }
+        
+        async function rechargeCard() {
+            const username = document.getElementById('rechargeUser').value;
+            const amount = parseFloat(document.getElementById('rechargeAmount').value);
+            
+            if (!username || !amount || amount <= 0) {
+                showMessage('请选择用户并输入有效金额', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/card-balance/${username}/recharge?amount=${amount}`, {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    showMessage(`充值成功！新余额：¥${data.new_balance.toFixed(2)}`, 'success');
+                    loadCardBalance();
+                } else {
+                    const error = await response.json();
+                    showMessage(error.detail || '充值失败', 'error');
+                }
+            } catch (error) {
+                showMessage('充值失败：' + error.message, 'error');
+            }
+        }
+        
+        // 加载学校日志
+        async function loadSchoolLogs(type = null) {
+            try {
+                const url = type ? `${API_BASE}/school-logs?log_type=${type}` : `${API_BASE}/school-logs`;
+                const response = await fetch(url);
+                const logs = await response.json();
+                
+                const container = document.getElementById('logsContainer');
+                container.innerHTML = logs.map(log => `
+                    <div class="log-item priority-${log.priority}">
+                        <div><span class="badge">${log.type}</span> <strong>${log.title}</strong></div>
+                        <div style="margin: 5px 0; color: #666;">${log.content}</div>
+                        <div style="font-size: 12px; color: #999;">${log.date}</div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('加载日志失败:', error);
+            }
+        }
+        
+        // 加载学校平面图
+        async function loadCampusMap() {
+            try {
+                const response = await fetch(`${API_BASE}/campus-map`);
+                const map = await response.json();
+                
+                // 渲染地图
+                const mapContainer = document.getElementById('campusMap');
+                mapContainer.innerHTML = map.buildings.map(building => `
+                    <div class="building ${building.type}" 
+                         style="left: ${building.coordinates.x}px; top: ${building.coordinates.y}px;"
+                         title="${building.description}">
+                        <strong>${building.name}</strong>
+                    </div>
+                `).join('');
+                
+                // 渲染设施表格
+                const tbody = document.getElementById('facilitiesTable');
+                tbody.innerHTML = map.facilities.map(f => `
+                    <tr>
+                        <td>${f.name}</td>
+                        <td>${f.count}</td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error('加载地图失败:', error);
+            }
+        }
+        
+        // 加载官网信息
+        async function loadWebsiteInfo() {
+            try {
+                const response = await fetch(`${API_BASE}/website`);
+                const info = await response.json();
+                
+                // 新闻
+                const newsContainer = document.getElementById('newsContainer');
+                newsContainer.innerHTML = info.news.map(n => `
+                    <div class="news-item">
+                        <div class="news-date">${n.date}</div>
+                        <div class="news-title">${n.title}</div>
+                        <div class="news-summary">${n.summary}</div>
+                    </div>
+                `).join('');
+                
+                // 院系
+                const deptContainer = document.getElementById('departmentsContainer');
+                deptContainer.innerHTML = info.departments.map(d => `<span class="badge">${d}</span>`).join('');
+                
+                // 联系方式
+                const contactContainer = document.getElementById('contactContainer');
+                contactContainer.innerHTML = `
+                    <p>📍 地址：${info.contact.address}</p>
+                    <p>📞 电话：${info.contact.phone}</p>
+                    <p>📧 邮箱：${info.contact.email}</p>
+                `;
+            } catch (error) {
+                console.error('加载官网信息失败:', error);
+            }
+        }
+        
         function showMessage(text, type) {
             const messageEl = document.getElementById('message');
             messageEl.textContent = text;
@@ -284,8 +838,15 @@
             }, 3000);
         }
         
-        // 页面加载时获取学生列表
+        // 页面加载时初始化
         loadStudents();
+        loadUsers();
+        loadRoles();
+        loadCourses();
+        loadCardBalance();
+        loadSchoolLogs();
+        loadCampusMap();
+        loadWebsiteInfo();
     </script>
 </body>
 </html>
